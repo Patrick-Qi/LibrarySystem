@@ -7,6 +7,7 @@ import com.example.springboot.controller.dto.LoginDTO;
 import com.example.springboot.controller.request.BaseRequest;
 import com.example.springboot.controller.request.LoginRequest;
 import com.example.springboot.entity.Admin;
+import com.example.springboot.exception.ServiceException;
 import com.example.springboot.mapper.AdminMapper;
 import com.example.springboot.service.IAdminService;
 import com.github.pagehelper.PageHelper;
@@ -61,17 +62,14 @@ public class AdminService implements IAdminService {
 
     @Override
     public LoginDTO login(LoginRequest request) {
-        LoginDTO loginDTO = null;
-        try{
-            Admin admin=adminMapper.getByUsernameAdnPassword(request);
-            loginDTO = new LoginDTO();
-            BeanUtils.copyProperties(admin, loginDTO);
-            return loginDTO;
-        }catch (Exception e)
-        {
-            log.error("登录出现异常",e);
-            return null;
+        Admin admin=adminMapper.getByUsernameAdnPassword(request);
+        if(admin == null){
+            throw new ServiceException("用户名或密码错误");
         }
+        LoginDTO loginDTO = new LoginDTO();
+        BeanUtils.copyProperties(admin, loginDTO);
+        return loginDTO;
+
 
     }
 }
