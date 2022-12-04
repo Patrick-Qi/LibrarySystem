@@ -5,5 +5,4 @@ import lombok.Data;
 @Data
 public class CategoryPageRequest extends BaseRequest{
     private String name;
-    private String remark;
 }

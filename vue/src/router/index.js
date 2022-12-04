@@ -19,11 +19,11 @@ const routes = [
     redirect: '/home',
     children: [
             //user route
-            {
-              path: 'home',
-              name: 'Home',
-              component: ()=> import('@/views/home/HomeView.vue'),
-            },
+        {
+          path: 'home',
+          name: 'Home',
+          component: ()=> import('@/views/home/HomeView.vue'),
+        },
         {
           path: 'user',
           name: 'User',
@@ -54,7 +54,24 @@ const routes = [
           path: 'editAdmin',
           name: 'EditAdmin',
           component: ()=> import('@/views/admin/Edit.vue'),
+        },
+        //category route
+        {
+          path: 'category',
+          name: 'Category',
+          component: ()=> import('@/views/category/List.vue'),
+        },
+        {
+          path: 'addCategory',
+          name: 'AddCategory',
+          component: ()=> import('@/views/category/Add.vue'),
+        },
+        {
+          path: 'editCategory',
+          name: 'EditCategory',
+          component: ()=> import('@/views/category/Edit.vue'),
         }
+
     ]
   },
   {

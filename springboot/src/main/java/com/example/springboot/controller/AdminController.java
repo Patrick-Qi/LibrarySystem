@@ -37,7 +37,6 @@ public class AdminController {
 
     @PostMapping("/save")
     public Result save(@RequestBody Admin admin) {
-
         adminService.save(admin);
         return Result.success();
     }

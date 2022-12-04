@@ -42,6 +42,16 @@
       <el-menu-item index="/admin">管理员列表</el-menu-item>
       <el-menu-item index="/addAdmin">管理员添加</el-menu-item>
       </el-submenu>
+
+      <el-submenu index="category">
+      <template slot="title">
+      <i class = "el-icon-s-management"></i>
+      <span>图书分类管理</span>
+      </template>
+      <el-menu-item index="/category">分类列表</el-menu-item>
+      <el-menu-item index="/addCategory">分类添加</el-menu-item>
+      </el-submenu>
+
       </el-menu>
     </div>
     <!--主体数据-->

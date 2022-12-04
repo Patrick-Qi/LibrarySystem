@@ -1,15 +1,12 @@
 <template>
     <div style="width : 70%">
-    <h2 style="text-align: center;">编辑管理员</h2>
+    <h2 style="text-align: center;">编辑分类</h2>
     <el-form :inline="true" :model="form" :rules="rules" ref="ruleForm" label-width="120px" >
-    <el-form-item label="用户名" prop="username">
-    <el-input v-model="form.username" placeholder="请输入姓名"></el-input>
+    <el-form-item label="名称" prop="name">
+    <el-input v-model="form.name" placeholder="请输入分类名称"></el-input>
     </el-form-item>
-    <el-form-item label="联系方式" prop="phone">
-    <el-input v-model="form.phone" placeholder="请输入联系方式"></el-input>
-    </el-form-item>
-    <el-form-item label="邮箱" prop="email">
-    <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
+    <el-form-item label="备注" prop="remark">
+    <el-input v-model="form.remark" placeholder="请输入备注"></el-input>
     </el-form-item>
     </el-form>
     <div style="text-align: center ; margin-top: 30px">
@@ -22,30 +19,30 @@
 <script>
 import request from "@/utils/request";
 export default {
-    name: 'EditAdmin',
+    name: 'EditCategory',
     data() {
         return {
             form: {},
             rules: {
-          username: [
-            { required: true, message: '请输入用户名', trigger: 'blur' },
-            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          name: [
+            { required: true, message: '请输入分类名称', trigger: 'blur' },
+            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
           ],
             }
         }
     },
     created() {
         const id = this.$route.query.id
-        request.get("/admin/" + id).then(res => {
+        request.get("/category/" + id).then(res => {
             this.form = res.data
         })
     },
     methods: {
         save(){
-            request.put('/admin/update' ,this.form).then(res => {
+            request.put('/category/update' ,this.form).then(res => {
                 if(res.code === '200'){
                     this.$notify.success('更新成功')
-                    this.$router.push("/admin")
+                    this.$router.push("/category")
                 } else{
                     this.$notify.error(res.msg)
                 }

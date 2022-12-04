@@ -1,9 +1,11 @@
 package com.example.springboot.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import lombok.Data;
+import java.util.List;
 import java.time.LocalDate;
 
+@Data
 public class Category {
     private Integer id;
     private String name;
@@ -13,4 +15,6 @@ public class Category {
     private LocalDate createtime;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDate updatetime;
+
+    private List<Category> children;
 }
