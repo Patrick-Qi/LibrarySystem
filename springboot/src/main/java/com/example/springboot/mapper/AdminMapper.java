@@ -2,8 +2,10 @@ package com.example.springboot.mapper;
 
 import com.example.springboot.controller.request.BaseRequest;
 import com.example.springboot.controller.request.LoginRequest;
+import com.example.springboot.controller.request.PasswordRequest;
 import com.example.springboot.entity.Admin;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +20,7 @@ public interface AdminMapper {
     void updateById(Admin admin);
     void deleteById(Integer id);
 
-    Admin getByUsernameAdnPassword(LoginRequest request);
+    Admin getByUsernameAdnPassword(@Param("username") String username,@Param("password") String password);
+
+    int updatePassword(PasswordRequest request);
 }

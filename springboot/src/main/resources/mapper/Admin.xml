@@ -14,6 +14,9 @@
     <update id="updateById">
         update admin set username = #{username},phone = #{phone},email=#{email},updatetime=#{updatetime} where id = #{id}
     </update>
+    <update id="updatePassword">
+        update admin set password=#{newPass} where username = #{username}
+    </update>
     <select id="list" resultType="com.example.springboot.entity.Admin">
         select * from admin order by id desc
     </select>

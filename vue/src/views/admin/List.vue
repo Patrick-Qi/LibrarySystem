@@ -17,12 +17,14 @@
     <el-table-column prop="createtime" label="创建时间"></el-table-column>
     <el-table-column prop="updatetime" label="最后更新时间"></el-table-column>
 
-    <el-table-column label="操作">
+    <el-table-column label="操作" width="300">
     <template v-slot="scope">
     <el-button type="primary" @click.native="$router.push('/editAdmin?id=' + scope.row.id)">编辑</el-button>
     <el-popconfirm title="确定删除？" @confirm="del(scope.row.id)" style="margin-left:5px">
     <el-button type="danger" slot="reference" >删除</el-button>
     </el-popconfirm>
+    <el-button type="warning" style="margin-left: 5px" @click.native="change(scope.row)" slot="reference" >修改密码</el-button>
+
     </template>
     </el-table-column>
     
@@ -41,30 +43,83 @@
       </el-pagination>
     </div>
 
+    <el-dialog title="修改密码" :visible.sync="dialogFormVisible" width="30%">
+  <el-form :model="form" label-width="100px" ref="formRef" :rules="rules">
+    <el-form-item label="新密码" prop="newPass">
+      <el-input v-model="form.newPass" autocomplete="off" show-password></el-input>
+    </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="changePass">确 定</el-button>
+    </div>
+    </el-dialog>
+
 </div>
 </template>
 
 <script>
 import request from "@/utils/request";
-
+import Cookies from 'js-cookie'
 export default {
   name: 'Admin',
   data() {
     return {
       tableData: [],
       total: 0,
+      form: {},
+      dialogFormVisible: false,
       params: {
         pageNum: 1,
         pageSize: 10,
         username: '',
         phone: ''
-      }
+      },
+      rules: {
+        newPass: [
+            { required: true, message: '请输入新密码', trigger: 'blur' },
+            { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          ],
+    },
+    
+    admin: Cookies.get('admin') ? JSON.parse(Cookies.get('admin')) : {},
     }
   },
   created() {
     this.load();
   },
   methods:{
+    change(row){
+      this.dialogFormVisible = true;
+      console.log("666")
+      this.form = JSON.parse(JSON.stringify(row))
+    },
+    changePass() {
+        this.$refs['formRef'].validate((valid)=>{
+        if(valid) {
+          request.put(  '/admin/changepass', this.form).then(res => {
+        if(res.code === '200') 
+        {
+          this.$notify.success("修改成功")
+          if(this.form.id===this.admin.id) {
+            Cookies.remove('admin')
+            this.$router.push('/login')
+          }
+          else{
+            this.load();
+            this.dialogFormVisible = false;
+          }
+          }
+          else{
+            console.log(this.form.newPass)
+            this.$notify.error("修改失败")
+          }
+      })
+        }
+
+        })
+    },
+
     load() {
       // fetch( 'http://localhost:9090/user/list').then(res => res.json()).then(res => {
       //   console.log(res)
@@ -101,6 +156,10 @@ export default {
                 this.$notify.error(res.msg)
             }
         })
+
+    },
+
+    handleChangePass(){
 
     }
   }
