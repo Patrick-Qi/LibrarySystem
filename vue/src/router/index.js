@@ -70,6 +70,23 @@ const routes = [
           path: 'editCategory',
           name: 'EditCategory',
           component: ()=> import('@/views/category/Edit.vue'),
+        },
+
+        //book route
+        {
+          path: 'book',
+          name: 'Book',
+          component: ()=> import('@/views/book/List.vue'),
+        },
+        {
+          path: 'addBook',
+          name: 'AddBook',
+          component: ()=> import('@/views/book/Add.vue'),
+        },
+        {
+          path: 'editBook',
+          name: 'EditBook',
+          component: ()=> import('@/views/book/Edit.vue'),
         }
 
     ]
