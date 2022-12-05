@@ -9,13 +9,19 @@ import java.util.List;
 @Mapper
 public interface BookMapper {
 
-    //    @Select("select * from user")
     List<Book> list();
+
     List<Book> listByCondition(BaseRequest baseRequest);
-    void save(Book book);
+
+    void save(Book obj);
+
     Book getById(Integer id);
-    void updateById(Book book);
+
+    void updateById(Book user);
+
     void deleteById(Integer id);
 
+    Book getByNo(String bookNo);
 
+    void updateNumByNo(String bookNo);
 }

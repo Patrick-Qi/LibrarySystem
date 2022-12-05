@@ -23,4 +23,5 @@ public interface AdminMapper {
     Admin getByUsernameAdnPassword(@Param("username") String username,@Param("password") String password);
 
     int updatePassword(PasswordRequest request);
+
 }

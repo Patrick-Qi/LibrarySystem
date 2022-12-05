@@ -1,5 +1,6 @@
 package com.example.springboot.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.example.springboot.controller.request.BaseRequest;
 import com.example.springboot.entity.Book;
 import com.example.springboot.mapper.BookMapper;
@@ -38,6 +39,7 @@ public class BookService implements IBookService {
 
     @Override
     public void save(Book obj) {
+        obj.setCategory(category(obj.getCategories()));
         bookMapper.save(obj);
     }
 
@@ -48,6 +50,7 @@ public class BookService implements IBookService {
 
     @Override
     public void updateById(Book obj) {
+        obj.setCategory(category(obj.getCategories()));
         obj.setUpdatetime(LocalDate.now());
         bookMapper.updateById(obj);
     }
@@ -56,4 +59,15 @@ public class BookService implements IBookService {
     public void deleteById(Integer id) {
         bookMapper.deleteById(id);
     }
+
+    private String category(List<String> categories){
+        StringBuilder sb = new StringBuilder();
+        if(CollUtil.isNotEmpty(categories)){
+            categories.forEach(v -> sb.append(v).append(" > "));
+            return sb.substring(0, sb.lastIndexOf(" > "));
+        }
+        return sb.toString();
+    }
+
+
 }

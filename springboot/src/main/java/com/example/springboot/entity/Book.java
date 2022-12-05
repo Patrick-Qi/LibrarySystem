@@ -1,21 +1,15 @@
 package com.example.springboot.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.List;
 
 @Data
-public class Book implements Serializable {
-
+public class Book extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
-    private Integer id;
 
     /**
      * 名称
@@ -48,25 +42,17 @@ public class Book implements Serializable {
     private String category;
 
     /**
-     * isbn
+     * 标准码
      */
-    private String bookIsbn;
-
-    /**
-     * 创建时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private LocalDate createtime;
-
-    /**
-     * 更新时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private LocalDate updatetime;
+    private String bookNo;
 
     /**
      * 封面
      */
     private String cover;
+
+    private List<String> categories;
+    private Integer score;
+    private Integer nums;
 
 }

@@ -2,22 +2,39 @@
   <div>
     <!--    搜索表单-->
     <div style="margin-bottom: 20px">
-      <el-input style="width: 240px" placeholder="请输入分类名称" v-model="params.name"></el-input>
+      <el-input style="width: 240px" placeholder="请输入名称" v-model="params.name"></el-input>
+      <el-input style="width: 240px; margin-left: 5px" placeholder="请输入联系方式" v-model="params.phone"></el-input>
       <el-button style="margin-left: 5px" type="primary" @click="load"><i class="el-icon-search"></i> 搜索</el-button>
       <el-button style="margin-left: 5px" type="warning" @click="reset"><i class="el-icon-refresh"></i> 重置</el-button>
     </div>
 
-    <el-table :data="tableData" stripe row-key="id"  default-expand-all>
+    <el-table :data="tableData" stripe>
       <el-table-column prop="id" label="编号" width="80"></el-table-column>
+      <el-table-column prop="username" label="会员卡号"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="remark" label="备注"></el-table-column>
+      <el-table-column prop="age" label="年龄"></el-table-column>
+      <el-table-column prop="address" label="地址"></el-table-column>
+      <el-table-column prop="phone" label="联系方式"></el-table-column>
+      <el-table-column prop="sex" label="性别"></el-table-column>
+      <el-table-column prop="account" label="账户积分"></el-table-column>
+      <el-table-column label="状态" width="230">
+        <template v-slot="scope">
+          <el-switch
+              v-model="scope.row.status"
+              @change="changeStatus(scope.row)"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column prop="createtime" label="创建时间"></el-table-column>
       <el-table-column prop="updatetime" label="更新时间"></el-table-column>
-      <el-table-column label="操作" width="280">
+
+      <el-table-column label="操作" width="230">
         <template v-slot="scope">
 <!--          scope.row 就是当前行数据-->
-          <el-button type="success" v-if="!scope.row.pid" @click="handleAdd(scope.row)">添加二级分类</el-button>
-          <el-button type="primary" @click="$router.push('/editCategory?id=' + scope.row.id)">编辑</el-button>
+          <el-button type="warning" @click="handleAccountAdd(scope.row)">充值</el-button>
+          <el-button type="primary" @click="$router.push('/editUser?id=' + scope.row.id)">编辑</el-button>
           <el-popconfirm
               style="margin-left: 5px"
               title="您确定删除这行数据吗？"
@@ -41,46 +58,52 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="添加二级分类" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog title="充值" :visible.sync="dialogFormVisible" width="30%">
       <el-form :model="form" label-width="100px" ref="ruleForm" :rules="rules" style="width: 85%">
-        <el-form-item label="分类名称" prop="name">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-form-item label="当前账户积分" prop="account">
+          <el-input disabled v-model="form.account" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="分类备注" prop="remark">
-          <el-input v-model="form.remark" autocomplete="off"></el-input>
+        <el-form-item label="积分" prop="score">
+          <el-input v-model="form.score" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button type="primary" @click="addAccount">确 定</el-button>
       </div>
     </el-dialog>
-    
+
   </div>
 </template>
 
 <script>
 import request from "@/utils/request";
-import Cookies from 'js-cookie'
 
 export default {
-  name: 'CategoryList',
+  name: 'User',
   data() {
+    const checkNums = (rule, value, callback) => {
+      value = parseInt(value)
+      if (value < 10 || value > 200) {
+        callback(new Error('请输入大于等于10小于或等于200的整数'));
+      }
+      callback()
+    };
     return {
-      admin: Cookies.get('admin') ? JSON.parse(Cookies.get('admin')) : {},
       tableData: [],
       total: 0,
-      dialogFormVisible: false,
-      form: {},
-      pid: null,
       params: {
         pageNum: 1,
         pageSize: 10,
         name: '',
+        phone: ''
       },
+      dialogFormVisible: false,
+      form: {},
       rules: {
-        name: [
-          {required: true, message: '请输入分类名称', trigger: 'blur'}
+        score: [
+          { required: true, message: '请输入积分', trigger: 'blur'},
+          { validator: checkNums, trigger: 'blur'}
         ]
       }
     }
@@ -89,8 +112,23 @@ export default {
     this.load()
   },
   methods: {
+    changeStatus(row) {
+      request.put('/user/update', row).then(res => {
+        if (res.code === '200') {
+          this.$notify.success('操作成功')
+          this.load()
+        } else {
+          this.$notify.error(res.msg)
+        }
+      })
+    },
     load() {
-      request.get('/category/page', {
+      // fetch('http://localhost:9090/user/list').then(res => res.json()).then(res => {
+      //   console.log(res)
+      //   this.tableData = res
+      // })
+
+      request.get('/user/page', {
         params: this.params
       }).then(res => {
         if (res.code === '200') {
@@ -103,7 +141,8 @@ export default {
       this.params = {
         pageNum: 1,
         pageSize: 10,
-        name: ''
+        name: '',
+        phone: ''
       }
       this.load()
     },
@@ -113,7 +152,7 @@ export default {
       this.load()
     },
     del(id) {
-      request.delete("/category/delete/" + id).then(res => {
+      request.delete("/user/delete/" + id).then(res => {
         if (res.code === '200') {
           this.$notify.success('删除成功')
           this.load()
@@ -122,20 +161,16 @@ export default {
         }
       })
     },
-    handleAdd(row) {
-      // 将当前行的id作为二级分类的pid
-      this.pid = row.id
+    handleAccountAdd(row) {
+      this.form = JSON.parse(JSON.stringify(row))
       this.dialogFormVisible = true
     },
-    save() {
+    addAccount() {
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          // 给二级分类赋值 pid
-          this.form.pid = this.pid
-          request.post('/category/save', this.form).then(res => {
+          request.post('/user/account', this.form).then(res => {
             if (res.code === '200') {
-              this.$notify.success('新增二级分类成功')
-              this.$refs['ruleForm'].resetFields()
+              this.$notify.success('充值成功')
               this.dialogFormVisible = false
               this.load()
             } else {

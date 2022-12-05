@@ -1,9 +1,9 @@
 import axios from 'axios'
-import router from '@/router'
-import Cookies from 'js-cookie';
+import router from "@/router";
+import Cookies from 'js-cookie'
 
 const request = axios.create({
-	baseURL: 'http://localhost:9090/api',  // 注意！！ 这里是全局统一加上了 '/api' 前缀，也就是说所有接口都会加上'/api'前缀在，页面里面写接口的时候就不要加 '/api'了，否则会出现2个'/api'，类似 '/api/api/user'这样的报错，切记！！！
+    baseURL: 'http://localhost:9090/api',
     timeout: 5000
 })
 
@@ -12,11 +12,12 @@ const request = axios.create({
 // 比如统一加token，对请求参数统一加密
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
+
     const adminJson = Cookies.get('admin')
-    if(adminJson) {
+    if (adminJson) {
+        // 设置请求头
         config.headers['token'] = JSON.parse(adminJson).token
     }
- // config.headers['token'] = user.token;  // 设置请求头
     return config
 }, error => {
     return Promise.reject(error)
@@ -31,8 +32,7 @@ request.interceptors.response.use(
         if (typeof res === 'string') {
             res = res ? JSON.parse(res) : res
         }
-        if(res.code === '401')
-        {
+        if (res.code === '401') {
             router.push('/login')
         }
         return res;
