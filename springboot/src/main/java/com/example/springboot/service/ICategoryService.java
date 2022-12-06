@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface ICategoryService {
+    
     List<Category> list();
 
     PageInfo<Category> page(BaseRequest baseRequest);
@@ -15,7 +16,8 @@ public interface ICategoryService {
 
     Category getById(Integer id);
 
-    void updateById(Category obj);
+    void update(Category obj);
 
     void deleteById(Integer id);
+
 }

@@ -55,4 +55,5 @@ public class Book extends BaseEntity implements Serializable {
     private Integer score;
     private Integer nums;
 
+
 }

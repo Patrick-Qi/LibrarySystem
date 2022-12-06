@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IBorrowService {
-
+    
     List<Borrow> list();
 
     PageInfo<Borrow> page(BaseRequest baseRequest);

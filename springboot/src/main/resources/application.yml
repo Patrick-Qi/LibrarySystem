@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/library?serverTimezone=GMT%2b8 #北京时间
+    url: jdbc:mysql://localhost:3306/lib?serverTimezone=GMT%2b8
     username: root
     password: 1274941604
 
@@ -12,5 +12,4 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    map-underscore-to-camel-case: true #数据库字段下划线转驼峰
-
+    map-underscore-to-camel-case: true  # 开启数据库字段下划线转驼峰

@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    //    @Select("select * from user")
+//    @Select("select * from user")
     List<User> list();
 
     List<User> listByCondition(BaseRequest baseRequest);

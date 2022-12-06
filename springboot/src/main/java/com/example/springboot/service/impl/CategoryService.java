@@ -2,7 +2,6 @@ package com.example.springboot.service.impl;
 
 import com.example.springboot.controller.request.BaseRequest;
 import com.example.springboot.entity.Category;
-import com.example.springboot.entity.Category;
 import com.example.springboot.mapper.CategoryMapper;
 import com.example.springboot.service.ICategoryService;
 import com.github.pagehelper.PageHelper;
@@ -12,26 +11,25 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-
 
 @Service
 @Slf4j
-
 public class CategoryService implements ICategoryService {
+
     @Resource
     CategoryMapper categoryMapper;
-    
-    
+
+
     @Override
     public List<Category> list() {
         return categoryMapper.list();
     }
 
     @Override
-    public PageInfo<Category> page(BaseRequest baseRequest){
+    public PageInfo<Category> page(BaseRequest baseRequest) {
         PageHelper.startPage(baseRequest.getPageNum(), baseRequest.getPageSize());
+        // 自关联查询
         List<Category> categories = categoryMapper.listByCondition(baseRequest);
         return new PageInfo<>(categories);
     }
@@ -47,7 +45,7 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public void updateById(Category obj) {
+    public void update(Category obj) {
         obj.setUpdatetime(LocalDate.now());
         categoryMapper.updateById(obj);
     }
@@ -56,4 +54,5 @@ public class CategoryService implements ICategoryService {
     public void deleteById(Integer id) {
         categoryMapper.deleteById(id);
     }
+
 }

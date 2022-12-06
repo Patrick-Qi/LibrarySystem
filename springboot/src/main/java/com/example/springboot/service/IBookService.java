@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface IBookService {
+    
     List<Book> list();
 
     PageInfo<Book> page(BaseRequest baseRequest);
@@ -15,7 +16,8 @@ public interface IBookService {
 
     Book getById(Integer id);
 
-    void updateById(Book obj);
+    void update(Book obj);
 
     void deleteById(Integer id);
+
 }

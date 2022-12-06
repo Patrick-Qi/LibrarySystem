@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class BookPageRequest extends BaseRequest{
     private String name;
-    private String book_isbn;
+    private String bookNo;
 }

@@ -12,16 +12,21 @@ import java.util.List;
 @Mapper
 public interface AdminMapper {
 
-//    @Select("select * from user")
     List<Admin> list();
+
     List<Admin> listByCondition(BaseRequest baseRequest);
-    void save(Admin admin);
+
+    void save(Admin obj);
+
     Admin getById(Integer id);
-    void updateById(Admin admin);
+
+    void updateById(Admin user);
+
     void deleteById(Integer id);
 
-    Admin getByUsernameAdnPassword(@Param("username") String username,@Param("password") String password);
+    Admin getByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     int updatePassword(PasswordRequest request);
 
+    Admin getByUsername(String username);
 }
